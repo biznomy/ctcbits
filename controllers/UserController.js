@@ -117,8 +117,7 @@ module.exports = {
                 if (!user.comparePassword(req.body.password)) {
                     res.status(401).json({ message: 'Authentication failed. Wrong password.' });
                 } else {
-                    res.status(200).json({token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id}, 'SALT_KEY')});
-                    // res.status(200).json({success : user._id});
+                    res.status(200).json({token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id}, 'SALT_KEY')});                    
                 }
             }
         });

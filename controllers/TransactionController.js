@@ -1,65 +1,65 @@
-var TodoModel = require('../models/TodoModel.js');
+var TransactionModel = require('../models/TransactionModel.js');
 
 /**
- * TodoController.js
+ * TransactionController.js
  *
- * @description :: Server-side logic for managing Todos.
+ * @description :: Server-side logic for managing Transactions.
  */
 module.exports = {
 
     /**
-     * TodoController.list()
+     * TransactionController.list()
      */
     list: function (req, res) {
-        TodoModel.find(req.query, function (err, Todos) {
+        TransactionModel.find(req.query, function (err, Transactions) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
                     error: err
                 });
             }
-            return res.json(Todos);
+            return res.json(Transactions);
         });
     },
 
     /**
-     * TodoController.show()
+     * TransactionController.show()
      */
     show: function (req, res) {
-        TodoModel.findById(req.params.id, function (err, Todo) {
+        TransactionModel.findById(req.params.id, function (err, Transaction) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
                     error: err
                 });
             }
-            return res.json(Todo);
+            return res.json(Transaction);
         });
     },
 
     /**
-     * TodoController.create()
+     * TransactionController.create()
      */
     create: function (req, res) {
 
-        var Todo = new TodoModel(req.body);
+        var Transaction = new TransactionModel(req.body);
 
-        Todo.save(function (err, Todo) {
+        Transaction.save(function (err, Transaction) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
                     error: err
                 });
             }
-            return res.status(201).json(Todo);
+            return res.status(201).json(Transaction);
         });
     },
 
     /**
-     * TodoController.update()
+     * TransactionController.update()
      */
     update: function (req, res) {
-        TodoModel.findByIdAndUpdate(req.params.id, req.body, {new : true}, function (err, Todo) {
+        TransactionModel.findByIdAndUpdate(req.params.id, req.body, {new : true}, function (err, Transaction) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
@@ -67,15 +67,15 @@ module.exports = {
                 });
             }     
 
-            return res.json(Todo);
+            return res.json(Transaction);
         });
     },
 
     /**
-     * TodoController.remove()
+     * TransactionController.remove()
      */
     remove: function (req, res) {
-        TodoModel.findByIdAndRemove(req.params.id, function (err, Todo) {
+        TransactionModel.findByIdAndRemove(req.params.id, function (err, Transaction) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
