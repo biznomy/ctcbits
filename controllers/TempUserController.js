@@ -1,5 +1,6 @@
 var TempUserModel = require('../models/TempUserModel');
 var UserModel = require('../models/UserModel');
+var UserController = require('../controllers/UserController');
 var _random = require('../utils/random');
 /**
  * TempUserController.js
@@ -91,15 +92,15 @@ var TempUserController = {
      * TempUserController.verify()
      */
     verify: function (req, res) {
-        var newTempUser = new TempUserModel(req.body);
-        newTempUser.expiration = TempUserModel.addExpiration();
-        newTempUser.save(function (err, TempUser) {
-            if (err) {
-                return res.status(400).send({ message: err });
-            } else {
-                return res.json(TempUser);
+
+        TempUserModel.findOne({ email: req.body.email }, function (err, TempUser) {
+            if (err) throw err;
+            if(TempUser && req.body.otp == TempUser.otp){
+                UserController.create(req, res);
+            }else{
+                return res.status(400).json("Invalid Credentials: otp"); 
             }
-        });
+        });        
     },
 
     /**
