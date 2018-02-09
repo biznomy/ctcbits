@@ -11,7 +11,6 @@ mongoose.connect('mongodb://localhost:27017/coindelta',  { useMongoClient: true 
 var index = require('./routes/index');
 var users = require('./routes/UserRoute');
 var transaction = require('./routes/TransactionRoute');
-var tempUser = require('./routes/TempUserRoute');
 
 var app = express();
 
@@ -50,9 +49,6 @@ app.use(function(req, res, next){
 app.use('/', index);
 app.use('/user', users);
 app.use('/transaction', transaction);
-app.use('/tempuser', tempUser);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

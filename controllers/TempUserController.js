@@ -55,6 +55,7 @@ var TempUserController = {
                     error: err
                 });
             }
+            TempUser.otp = undefined;
             return res.status(201).json(TempUser);
         });
     },
@@ -71,6 +72,7 @@ var TempUserController = {
                 });
             }
 
+            TempUser.otp = undefined;
             return res.json(TempUser);
         });
     },
@@ -98,7 +100,7 @@ var TempUserController = {
         TempUserModel.findOne({ email: req.body.email }, function (err, TempUser) {
             if (err) throw err;
             if(TempUser && req.body.otp == TempUser.otp){
-                UserController.create(req, res);
+                UserController.register(req, res);
             }else{
                 return res.status(400).json("Invalid Credentials: otp"); 
             }

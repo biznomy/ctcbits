@@ -41,20 +41,20 @@ module.exports = {
     /**
      * UserController.create()
      */
-    create: function (req, res) {
+    // create: function (req, res) {
 
-        var User = new UserModel(req.body);
+    //     var User = new UserModel(req.body);
 
-        User.save(function (err, User) {
-            if (err) {
-                return res.status(500).json({
-                    message: err.message,
-                    error: err
-                });
-            }
-            return res.status(201).json(User);
-        });
-    },
+    //     User.save(function (err, User) {
+    //         if (err) {
+    //             return res.status(500).json({
+    //                 message: err.message,
+    //                 error: err
+    //             });
+    //         }
+    //         return res.status(201).json(User);
+    //     });
+    // },
 
     /**
      * UserController.update()
