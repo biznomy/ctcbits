@@ -2,6 +2,8 @@ var TempUserModel = require('../models/TempUserModel');
 var UserModel = require('../models/UserModel');
 var UserController = require('../controllers/UserController');
 var _random = require('../utils/random');
+var nodemailer = require('../utils/nodemailer');
+
 /**
  * TempUserController.js
  *
@@ -132,6 +134,10 @@ var TempUserController = {
                 req.params.id = data._id;
                 TempUserController.update(req, res);
             }
+            var mailOptions = nodemailer.mailOptions;
+            mailOptions.to = req.body.email;
+            mailOptions.text = "OTP Value : " + req.body.otp;
+            nodemailer.mailSender(mailOptions);
         });
     }
 };

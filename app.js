@@ -12,7 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/UserRoute');
 var transaction = require('./routes/TransactionRoute');
 var tempUser = require('./routes/TempUserRoute');
-// var nodemailer = require('./utils/nodemailer');
+
 var app = express();
 
 // view engine setup
