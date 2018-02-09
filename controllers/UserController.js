@@ -1,12 +1,13 @@
 var UserModel = require('../models/UserModel.js');
 var jsonwebtoken = require('jsonwebtoken');
-var	bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt');
+var _random = require('../utils/random');
 /**
  * UserController.js
  *
  * @description :: Server-side logic for managing Users.
  */
-module.exports = {
+var UserController = {
 
     /**
      * UserController.list()
@@ -60,13 +61,13 @@ module.exports = {
      * UserController.update()
      */
     update: function (req, res) {
-        UserModel.findByIdAndUpdate(req.params.id, req.body, {new : true}, function (err, User) {
+        UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true }, function (err, User) {
             if (err) {
                 return res.status(500).json({
                     message: err.message,
                     error: err
                 });
-            }     
+            }
 
             return res.json(User);
         });
@@ -90,25 +91,28 @@ module.exports = {
     /**
      * UserController.register()
      */
-    register : function (req, res) {
-        
+    register: function (req, res) {
+
         var newUser = new UserModel(req.body);
         newUser.password = bcrypt.hashSync(req.body.password, 10);
-        newUser.save(function (err, user) {
-            if (err) {
-                return res.status(400).send({ message: err });
-            } else {
-                user.password = undefined;
-                user.role = undefined;
-                return res.json(user);
-            }
-        });
+        UserController._randomUserID().then(USR_ID=>{
+            newUser.username =  USR_ID;
+            newUser.save(function (err, user) {
+                if (err) {
+                    return res.status(400).send({ message: err });
+                } else {
+                    user.password = undefined;
+                    user.role = undefined;
+                    return res.json(user);
+                }
+            });
+        });        
     },
 
     /**
      * UserController.signIn()
      */
-    signIn : function (req, res) {
+    signIn: function (req, res) {
         UserModel.findOne({ username: req.body.username }, function (err, user) {
             if (err) { throw err };
             if (!user) {
@@ -117,7 +121,7 @@ module.exports = {
                 if (!user.comparePassword(req.body.password)) {
                     res.status(401).json({ message: 'Authentication failed. Wrong password.' });
                 } else {
-                    res.status(200).json({token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id}, 'SALT_KEY')});                    
+                    res.status(200).json({ token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id }, 'SALT_KEY') });
                 }
             }
         });
@@ -126,11 +130,29 @@ module.exports = {
     /**
      * UserController.loginRequired()
      */
-    loginRequired : function (req, res, next) {
+    loginRequired: function (req, res, next) {
         if (req.user) {
             next();
         } else {
             res.status(401).json({ message: 'Unauthorised user !' });
         }
+    },
+
+    _randomUserID: function () {
+        return new Promise((resolve, reject) => {
+            var CCBITS = 'CT' + _random._Number(6);
+            UserModel.findOne({ username: CCBITS }, function (err, Users) {
+                if (err) {
+                    reject(err.message);
+                }
+                if (!Users) {
+                    resolve(CCBITS)
+                } else if (Users) {
+                    getUserId();
+                }
+            });
+        });
     }
 };
+
+module.exports = UserController;

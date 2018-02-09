@@ -118,9 +118,9 @@ var TempUserController = {
                 req.body.otp = _random._Number(6);
                 req.body.expiration = new TempUserModel().addExpiration();
                 TempUserController.upsert(req, res);
-            } else if (User) {
-                res.status(403).json({ message: 'User Already Exist.' });
-            }
+           } else if (User) {
+               res.status(403).json({ message: 'User Already Exist.' });
+           }
         });
     },
     
