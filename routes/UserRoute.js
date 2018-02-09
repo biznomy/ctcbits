@@ -6,6 +6,11 @@ var TempUserController = require('../controllers/TempUserController');
 /*
  * GET
  */
+router.get('', TempUserController.forgotPassword);
+
+/*
+ * POST
+ */
 router.post('/login', UserController.signIn);
 
 /*
@@ -17,6 +22,11 @@ router.post('/request', TempUserController.request);
  * POST
  */
 router.post('/register', TempUserController.verify);
+
+/*
+ * update password
+ */
+router.post('/changepassword', TempUserController.changepassword);
 
 
 module.exports = router;

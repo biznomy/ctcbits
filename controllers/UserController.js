@@ -138,6 +138,9 @@ var UserController = {
         }
     },
 
+    /**
+     * UserController._randomUserID()
+     */
     _randomUserID: function () {
         return new Promise((resolve, reject) => {
             var CCBITS = 'CT' + _random._Number(6);

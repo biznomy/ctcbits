@@ -141,7 +141,37 @@ var TempUserController = {
             mailOptions.text = "OTP Value : " + req.body.otp;
             nodemailer.mailSender(mailOptions);
         });
+    },
+
+    forgotPassword : function(req, res) {
+        
+        UserModel.findOne({ email: req.query.email }, function (err, User) {
+            if (err) { throw err };
+            if (User) {
+                req.body.otp = _random._Number(6);
+                req.body.expiration = new TempUserModel().addExpiration();
+                req.body.email = req.params.email;
+                TempUserController.upsert(req, res);
+           } else if (!User) {
+               res.status(401).json({ message: 'User Not Exist.' });
+           }
+        });
+
+    },
+
+    changepassword : function(req, res){
+
+        TempUserModel.findOne({ email: req.body.email }, function (err, TempUser) {
+            if (err) throw err;
+            if(TempUser && req.body.otp == TempUser.otp){
+                UserController.register(req, res);
+            }else{
+                return res.status(400).json("Invalid Credentials: otp"); 
+            }
+        });
+
     }
+    
 };
 
 module.exports = TempUserController;
