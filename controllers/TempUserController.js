@@ -151,8 +151,9 @@ var TempUserController = {
             if (User) {
                 req.body.otp = _random._Number(6);
                 req.body.expiration = new TempUserModel().addExpiration();
-                req.body.email = req.params.email;
+                req.body.email = req.query.email;
                 TempUserController.upsert(req, res);
+                // res.status(200).json({ message: 'Mail Send' });
            } else if (!User) {
                res.status(401).json({ message: 'User Not Exist.' });
            }
