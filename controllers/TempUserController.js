@@ -3,6 +3,7 @@ var UserModel = require('../models/UserModel');
 var UserController = require('../controllers/UserController');
 var _random = require('../utils/random');
 var nodemailer = require('../utils/nodemailer');
+var bcrypt = require('bcrypt');
 
 /**
  * TempUserController.js
@@ -164,7 +165,15 @@ var TempUserController = {
         TempUserModel.findOne({ email: req.body.email }, function (err, TempUser) {
             if (err) throw err;
             if(TempUser && req.body.otp == TempUser.otp){
-                UserController.register(req, res);
+                // UserController.register(req, res);
+                UserModel.findOne({ email: req.body.email }, function(err, User){
+                    if(err) throw err;
+                    if(User){
+                        User.password = bcrypt.hashSync(req.body.password, 10);
+                        User.save();
+                        return res.status(200).json("Password Changed Successfully"); 
+                    }
+                });
             }else{
                 return res.status(400).json("Invalid Credentials: otp"); 
             }
