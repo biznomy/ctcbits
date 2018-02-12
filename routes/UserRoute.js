@@ -22,12 +22,16 @@ router.post('/login', UserController.signIn);
 /*
  * GET
  */
-router.get('', TempUserController.forgotPassword);
+router.get('', UserController.loginRequired,  UserController.isAdmin, TempUserController.list);
 
 /*
  * update password
  */
 router.post('/changepassword', TempUserController.changepassword);
 
+/*
+ * GET
+ */
+router.get('/fetch', TempUserController.forgotPassword);
 
 module.exports = router;

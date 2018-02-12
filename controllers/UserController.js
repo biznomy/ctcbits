@@ -2,6 +2,7 @@ var UserModel = require('../models/UserModel.js');
 var jsonwebtoken = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 var _random = require('../utils/random');
+var nodemailer = require('../utils/nodemailer');
 /**
  * UserController.js
  *
@@ -101,9 +102,15 @@ var UserController = {
                 if (err) {
                     return res.status(400).send({ message: err });
                 } else {
-                    user.password = undefined;
-                    user.role = undefined;
+                     user.password = undefined;
+                     user.role = undefined;
+                     var mailOptions = nodemailer.mailOptions;
+                     mailOptions.to = user.email;
+                     mailOptions.text = 'Congratulations on signing up /n Welcome,'+user.firstname+', Your User Id is:'+user.username+'';
+                    // html: '<h1>Congratulations on signing</h1><div><p><b>Welcome,'+user.firstname+', Your User Id is:'+user.username+' </b></p></div>'
+                     nodemailer.mailSender(mailOptions);
                     return res.json(user);
+
                 }
             });
         });        
@@ -132,6 +139,17 @@ var UserController = {
      */
     loginRequired: function (req, res, next) {
         if (req.user) {
+            next();
+        } else {
+            res.status(401).json({ message: 'Unauthorised user !' });
+        }
+    },
+
+    /**
+     * UserController.isAdmin()
+     */
+    isAdmin: function (req, res, next) {
+        if (req.user.role === 'admin') {
             next();
         } else {
             res.status(401).json({ message: 'Unauthorised user !' });

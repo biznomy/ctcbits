@@ -165,6 +165,8 @@ var TempUserController = {
 
         TempUserModel.findOne({ email: req.body.email }, function (err, TempUser) {
             if (err) throw err;
+            console.log(req.body.otp);
+            console.log(TempUser)
             if(TempUser && req.body.otp == TempUser.otp){
                 // UserController.register(req, res);
                 UserModel.findOne({ email: req.body.email }, function(err, User){
