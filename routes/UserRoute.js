@@ -20,11 +20,6 @@ router.post('/register', TempUserController.verify);
 router.post('/login', UserController.signIn);
 
 /*
- * GET
- */
-router.get('', UserController.loginRequired,  UserController.isAdmin, TempUserController.list);
-
-/*
  * update password
  */
 router.post('/changepassword', TempUserController.changepassword);
@@ -33,5 +28,10 @@ router.post('/changepassword', TempUserController.changepassword);
  * GET
  */
 router.get('/fetch', TempUserController.forgotPassword);
+
+/*
+ * GET
+ */
+router.get('/user/all', UserController.loginRequired, UserController.isAdmin, UserController.list);
 
 module.exports = router;

@@ -6,11 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jsonwebtoken = require("jsonwebtoken");
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/coindelta',  { useMongoClient: true });
+mongoose.connect('mongodb://192.168.1.119:27017/coindelta',  { useMongoClient: true });
 
 var index = require('./routes/index');
 var users = require('./routes/UserRoute');
 var transaction = require('./routes/TransactionRoute');
+
 
 var app = express();
 
@@ -48,7 +49,10 @@ app.use(function(req, res, next){
 
 app.use('/', index);
 app.use('/user', users);
+app.use('/admin', users);
 app.use('/transaction', transaction);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

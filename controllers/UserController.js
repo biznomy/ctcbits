@@ -96,8 +96,10 @@ var UserController = {
 
         var newUser = new UserModel(req.body);
         newUser.password = bcrypt.hashSync(req.body.password, 10);
+        delete newUser.role;
         UserController._randomUserID().then(USR_ID=>{
             newUser.username =  USR_ID;
+            
             newUser.save(function (err, user) {
                 if (err) {
                     return res.status(400).send({ message: err });
@@ -128,7 +130,7 @@ var UserController = {
                 if (!user.comparePassword(req.body.password)) {
                     res.status(401).json({ message: 'Authentication failed. Wrong password.' });
                 } else {
-                    res.status(200).json({ token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id }, 'SALT_KEY') });
+                    res.status(200).json({ token: jsonwebtoken.sign({ email: user.email, username: user.username, _id: user._id, role : user.role }, 'SALT_KEY', { expiresIn: '1h' }) });
                 }
             }
         });
